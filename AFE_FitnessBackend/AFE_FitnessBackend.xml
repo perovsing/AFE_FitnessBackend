@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AFE_FitnessBackend</name>
+    </assembly>
+    <members>
+        <member name="M:AFE_FitnessBackend.Controllers.ExercisesController.PostExercise(AFE_FitnessBackend.Models.Dtos.ExerciseDto,System.Int64)">
+            <summary>
+            Use this endpoint to add an exercise to an existing workout program.
+            </summary>
+            <param name="exerciseDto">exercise</param>
+            <param name="programId">programId for the program the exercise is added to.</param>
+            <returns>The created exercise</returns>
+        </member>
+        <member name="M:AFE_FitnessBackend.Controllers.ExercisesController.GetExercises">
+            <summary>
+            Gets all exercises a trainer has in the system.
+            </summary>
+            <returns>A list of exercises.</returns>
+        </member>
+        <member name="M:AFE_FitnessBackend.Controllers.UsersController.Login(AFE_FitnessBackend.Models.Dtos.Login)">
+            <summary>
+            You must login before you can use any other api call.
+            </summary>
+            <param name="login"></param>
+            <returns>JWT token</returns>
+        </member>
+        <member name="M:AFE_FitnessBackend.Controllers.UsersController.ChangePassword(AFE_FitnessBackend.Models.Dtos.NewPassword)">
+            <summary>
+            Use to change the password.
+            </summary>
+            <param name="newPassword"></param>
+            <returns>Token</returns>
+        </member>
+        <member name="M:AFE_FitnessBackend.Controllers.UsersController.GetUsers">
+            <summary>
+            Get a let of all users
+            </summary>
+            <returns>All users</returns>
+        </member>
+        <member name="M:AFE_FitnessBackend.Controllers.UsersController.GetClientsForTrainer">
+            <summary>
+            Gets the list of clients for a personal trainer.
+            </summary>
+            <returns>A list of users</returns>
+        </member>
+        <member name="M:AFE_FitnessBackend.Controllers.UsersController.GetTrainer">
+            <summary>
+            Returns the personal trainer for the logged in user.
+            </summary>
+            <returns>Personal Trainer</returns>
+        </member>
+        <member name="M:AFE_FitnessBackend.Controllers.UsersController.PostUser(AFE_FitnessBackend.Models.Dtos.User)">
+            <summary>
+            Valid accountTypes are: Client and PersonalTrainer".
+            The userId is set by the backend.
+            The personalTrainerId is only used for clients.
+            Valid accountTypes are PersonalTrainer and Client.
+            </summary>
+            <param name="user"></param>
+            <returns>user with id</returns>
+        </member>
+        <member name="P:AFE_FitnessBackend.Models.Entities.Exercise.ExerciseId">
+            <summary>
+            Primary key
+            </summary>
+        </member>
+        <member name="P:AFE_FitnessBackend.Models.Entities.Exercise.WorkoutProgramId">
+            <summary>
+            FK
+            </summary>
+        </member>
+        <member name="P:AFE_FitnessBackend.Models.Entities.Exercise.PersonalTrainerId">
+            <summary>
+            FK to personal trainer
+            </summary>
+        </member>
+    </members>
+</doc>
