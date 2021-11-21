@@ -112,6 +112,12 @@ namespace AFE_FitnessBackend.Controllers
                 ModelState.AddModelError(string.Empty, "Only personal trainers can call this endpoint.");
                 return BadRequest(ModelState);
             }
+            var userId = long.Parse(GetClaim("UserId"));
+            workoutProgram.PersonalTrainerId = userId;
+            foreach (var ex in workoutProgram.Exercises)
+            {
+                ex.PersonalTrainerId = userId;
+            }
             _context.WorkoutPrograms.Add(workoutProgram);
             await _context.SaveChangesAsync();
 
