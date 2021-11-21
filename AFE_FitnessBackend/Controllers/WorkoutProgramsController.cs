@@ -23,6 +23,11 @@ namespace AFE_FitnessBackend.Controllers
         }
 
         // GET: api/WorkoutPrograms
+        /// <summary>
+        /// Returns all programs posted by the personalTrainer that is sending 
+        /// the request.
+        /// </summary>
+        /// <returns>An array of WorkoutPrograms</returns>
         [HttpGet("trainer")]
         public async Task<ActionResult<IEnumerable<WorkoutProgram>>> GetWorkoutProgramsForTrainer()
         {
@@ -35,7 +40,11 @@ namespace AFE_FitnessBackend.Controllers
             long trainerId = long.Parse(GetClaim("UserId"));
             return await _context.WorkoutPrograms.Where(w => w.PersonalTrainerId == trainerId).Include(w => w.Exercises).ToListAsync();
         }
-
+        /// <summary>
+        /// Returns the workout programs for the specified client.
+        /// </summary>
+        /// <param name="id">Client id</param>
+        /// <returns>An array of WorkoutPrograms</returns>
         [HttpGet("client/{id}")]
         public async Task<ActionResult<IEnumerable<WorkoutProgram>>> GetWorkoutProgramsForClient(long id)
         {
@@ -43,17 +52,30 @@ namespace AFE_FitnessBackend.Controllers
         }
 
         // GET: api/WorkoutPrograms
+        /// <summary>
+        /// Gets all workoutPrograms associated with the current user. For the manager
+        /// all workoutPrograms will be returned.
+        /// </summary>
+        /// <returns>An array of WorkoutPrograms</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<WorkoutProgram>>> GetWorkoutPrograms()
         {
             var role = GetClaim("Role");
-            if (role != Role.PersonalTrainer.ToString())
+            if (role == Role.Manager.ToString())
             {
-                ModelState.AddModelError(string.Empty, "Only personal trainers can call this endpoint.");
-                return BadRequest(ModelState);
+                return await _context.WorkoutPrograms.Include(w => w.Exercises).ToListAsync();
             }
-            long trainerId = long.Parse(GetClaim("UserId"));
-            return await _context.WorkoutPrograms.Where(w => w.PersonalTrainerId == trainerId).Include(w => w.Exercises).ToListAsync();
+            if (role == Role.PersonalTrainer.ToString())
+            {
+                long trainerId = long.Parse(GetClaim("UserId"));
+                return await _context.WorkoutPrograms.Where(w => w.PersonalTrainerId == trainerId).Include(w => w.Exercises).ToListAsync();
+            }
+            if (role == Role.Client.ToString())
+            {
+                long userId = long.Parse(GetClaim("UserId"));
+                return await _context.WorkoutPrograms.Where(w => w.ClientId == userId).Include(w => w.Exercises).ToListAsync();
+            }
+            return BadRequest("Role unknown");
         }
 
         // GET: api/WorkoutPrograms/5

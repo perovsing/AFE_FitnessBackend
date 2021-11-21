@@ -60,6 +60,27 @@
             <param name="user"></param>
             <returns>user with id</returns>
         </member>
+        <member name="M:AFE_FitnessBackend.Controllers.WorkoutProgramsController.GetWorkoutProgramsForTrainer">
+            <summary>
+            Returns all programs posted by the personalTrainer that is sending 
+            the request.
+            </summary>
+            <returns>An array of WorkoutPrograms</returns>
+        </member>
+        <member name="M:AFE_FitnessBackend.Controllers.WorkoutProgramsController.GetWorkoutProgramsForClient(System.Int64)">
+            <summary>
+            Returns the workout programs for the specified client.
+            </summary>
+            <param name="id">Client id</param>
+            <returns>An array of WorkoutPrograms</returns>
+        </member>
+        <member name="M:AFE_FitnessBackend.Controllers.WorkoutProgramsController.GetWorkoutPrograms">
+            <summary>
+            Gets all workoutPrograms associated with the current user. For the manager
+            all workoutPrograms will be returned.
+            </summary>
+            <returns>An array of WorkoutPrograms</returns>
+        </member>
         <member name="P:AFE_FitnessBackend.Models.Entities.Exercise.ExerciseId">
             <summary>
             Primary key
