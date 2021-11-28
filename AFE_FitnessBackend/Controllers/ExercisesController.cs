@@ -66,6 +66,23 @@ namespace AFE_FitnessBackend.Controllers
             return await _context.Exercises.Where(e => e.PersonalTrainerId == userId).ToListAsync();
         }
 
+        // GET: api/Exercises
+        /// <summary>
+        /// Gets all exercises not assigned to a workout program for a personal trainer.
+        /// </summary>
+        /// <returns>A list of unassigned exercises.</returns>
+        [HttpGet("unassigned")]
+        public async Task<ActionResult<IEnumerable<Exercise>>> GetUnassignedExercises()
+        {
+            var role = GetClaim("Role");
+            if (role != Role.PersonalTrainer.ToString())
+            {
+                return BadRequest(new { error = "Only personal trainers can call this endpoint" });
+            }
+            var userId = long.Parse(GetClaim("UserId"));
+            return await _context.Exercises.Where(e => e.PersonalTrainerId == userId && e.WorkoutProgramId == null).ToListAsync();
+        }
+
         // GET: api/Exercises/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Exercise>> GetExercise(long id)

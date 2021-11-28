@@ -79,10 +79,15 @@ namespace AFE_FitnessBackend.Controllers
         }
 
         // GET: api/WorkoutPrograms/5
+        /// <summary>
+        /// Returns the specified program with exercises.
+        /// </summary>
+        /// <param name="id">WorkoutProgramId</param>
+        /// <returns>Workout Program with exercises</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<WorkoutProgram>> GetWorkoutProgram(long id)
         {
-            var workoutProgram = await _context.WorkoutPrograms.FindAsync(id);
+            var workoutProgram = await _context.WorkoutPrograms.Where(w => w.WorkoutProgramId == id).Include(w => w.Exercises).FirstOrDefaultAsync();
 
             if (workoutProgram == null)
             {
@@ -168,6 +173,34 @@ namespace AFE_FitnessBackend.Controllers
             return NoContent();
         }
 
+        //[HttpPost("exercise/{id}")]
+        //public async Task<IActionResult> PostWorkoutProgramExercise(long id, Exercise exercise)
+        //{
+        //    if (!WorkoutProgramExists(id)
+        //    {
+        //        return BadRequest("WorkoutProgramId");
+        //    }
+
+        //    _context.Entry(workoutProgram).State = EntityState.Modified;
+
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!WorkoutProgramExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+
+        //    return NoContent();
+        //}
         private bool WorkoutProgramExists(long id)
         {
             return _context.WorkoutPrograms.Any(e => e.WorkoutProgramId == id);

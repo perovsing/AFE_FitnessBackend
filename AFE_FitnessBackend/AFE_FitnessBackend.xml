@@ -18,6 +18,12 @@
             </summary>
             <returns>A list of exercises.</returns>
         </member>
+        <member name="M:AFE_FitnessBackend.Controllers.ExercisesController.GetUnassignedExercises">
+            <summary>
+            Gets all exercises not assigned to a workout program for a personal trainer.
+            </summary>
+            <returns>A list of unassigned exercises.</returns>
+        </member>
         <member name="M:AFE_FitnessBackend.Controllers.UsersController.Login(AFE_FitnessBackend.Models.Dtos.Login)">
             <summary>
             You must login before you can use any other api call.
@@ -80,6 +86,13 @@
             all workoutPrograms will be returned.
             </summary>
             <returns>An array of WorkoutPrograms</returns>
+        </member>
+        <member name="M:AFE_FitnessBackend.Controllers.WorkoutProgramsController.GetWorkoutProgram(System.Int64)">
+            <summary>
+            Returns the specified program with exercises.
+            </summary>
+            <param name="id">WorkoutProgramId</param>
+            <returns>Workout Program with exercises</returns>
         </member>
         <member name="P:AFE_FitnessBackend.Models.Entities.Exercise.ExerciseId">
             <summary>

@@ -89,6 +89,10 @@ namespace AFE_FitnessBackend.Controllers
                 ModelState.AddModelError("email", "Not found!");
                 return BadRequest(ModelState);
             }
+            if (account.AccountType == Role.Manager)
+                return BadRequest("Cannot change password for managers");
+            if (account.UserId <= 3)
+                return BadRequest("Cannot change password for Superman or Superwoman");
             var validPwd = Verify(newPassword.OldPassword, account.PwHash);
             if (validPwd)
             {
@@ -189,23 +193,24 @@ namespace AFE_FitnessBackend.Controllers
         {
             if (id != user.UserId)
             {
-                return BadRequest();
+                return BadRequest(new { error = "id and UserId must match" });
             }
 
             var role = GetClaim("Role");
+            var userId = long.Parse(GetClaim("UserId"));
             if (role == Role.Client.ToString())
             {
-                return Unauthorized(new { error = "Clients are not allowed to create users" });
+                if (userId != user.UserId)
+                    return Unauthorized(new { error = "Clients are not allowed to change other users" });
+                if (user.AccountType != Role.Client.ToString())
+                    return Unauthorized(new { error = "Clients are not allowed to change their AccoutType" });
             }
             if (user.AccountType == Role.Manager.ToString())
                 return BadRequest(new { error = "You are not allowed to create managers" });
-            user.UserId = 0;
             if (user.FirstName == string.Empty)
                 return BadRequest(new { error = "First name is required" });
             if (user.LastName == string.Empty)
                 return BadRequest(new { error = "Last name is required" });
-            if (user.Password == string.Empty)
-                return BadRequest(new { error = "Password is required" });
             if (user.Email == string.Empty)
                 return BadRequest(new { error = "Email address is required" });
             user.Email = user.Email.ToLowerInvariant();
