@@ -218,29 +218,25 @@ namespace AFE_FitnessBackend.Controllers
                 return BadRequest(new { error = "Not a valid email address" });
             if (user.AccountType == string.Empty)
                 return BadRequest(new { error = "AccountType is required" });
-            Object clientRole;
-            var validRole = Enum.TryParse(typeof(Role), user.AccountType, out clientRole);
+            var validRole = Enum.TryParse(typeof(Role), user.AccountType, out _);
             if (!validRole)
                 return BadRequest(new { error = "AccountType not valid" });
-
-            var eUser = user.ToEntityUser();
             try
             {
                 var old = await _context.Users.FindAsync(user.UserId);
-                eUser.PwHash = old.PwHash;
-                _context.Entry(eUser).State = EntityState.Modified;            
+                if (old == null)
+                    return NotFound();
+                // Copy new values to old
+                old.AccountType = (Role)Enum.Parse(typeof(Role), user.AccountType);
+                old.Email = user.Email;
+                old.FirstName = user.FirstName;
+                old.LastName = user.LastName;
+                old.PersonalTrainerId = user.PersonalTrainerId;
                 await _context.SaveChangesAsync();
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(ex.Message);
             }
 
             return NoContent();
