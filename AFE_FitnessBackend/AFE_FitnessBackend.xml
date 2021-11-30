@@ -33,10 +33,12 @@
         </member>
         <member name="M:AFE_FitnessBackend.Controllers.UsersController.ChangePassword(AFE_FitnessBackend.Models.Dtos.NewPassword)">
             <summary>
-            Use to change the password.
+            Client and personal trainers can change their password.
+            Personal trainers can also change password for clients.
+            The current token is still valid, for the current user.
             </summary>
-            <param name="newPassword"></param>
-            <returns>Token</returns>
+            <param name="newPassword">Contains the users email, old password and new password</param>
+            <returns>Nothing</returns>
         </member>
         <member name="M:AFE_FitnessBackend.Controllers.UsersController.GetUsers">
             <summary>

@@ -68,12 +68,14 @@ namespace AFE_FitnessBackend.Controllers
         }
 
         /// <summary>
-        /// Use to change the password.
+        /// Client and personal trainers can change their password.
+        /// Personal trainers can also change password for clients.
+        /// The current token is still valid, for the current user.
         /// </summary>
-        /// <param name="newPassword"></param>
-        /// <returns>Token</returns>
+        /// <param name="newPassword">Contains the users email, old password and new password</param>
+        /// <returns>Nothing</returns>
         [HttpPut("Password")]
-        public async Task<ActionResult<Token>> ChangePassword(NewPassword newPassword)
+        public async Task<ActionResult> ChangePassword(NewPassword newPassword)
         {
             if (newPassword == null)
             {
@@ -98,7 +100,7 @@ namespace AFE_FitnessBackend.Controllers
             {
                 account.PwHash = HashPassword(newPassword.Password, BcryptWorkfactor);
                 await _context.SaveChangesAsync().ConfigureAwait(false);
-                return Ok();
+                return NoContent();
             }
             else
             {
