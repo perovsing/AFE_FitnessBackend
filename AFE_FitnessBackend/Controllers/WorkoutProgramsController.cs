@@ -153,6 +153,11 @@ namespace AFE_FitnessBackend.Controllers
         }
 
         // DELETE: api/WorkoutPrograms/5
+        /// <summary>
+        /// Deletes a workout program and all it's associated exercises.
+        /// </summary>
+        /// <param name="id">WorkoutProgramId</param>
+        /// <returns>No content</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWorkoutProgram(long id)
         {
