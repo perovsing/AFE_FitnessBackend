@@ -4,6 +4,7 @@ using AFE_FitnessBackend.Models.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -161,15 +162,19 @@ namespace AFE_FitnessBackend.Controllers
                 ModelState.AddModelError(string.Empty, "Only personal trainers can call this endpoint.");
                 return BadRequest(ModelState);
             }
-            var workoutProgram = await _context.WorkoutPrograms.FindAsync(id);
+            var workoutProgram = await _context.WorkoutPrograms.Include(w => w.Exercises).Where(w => w.WorkoutProgramId == id).FirstOrDefaultAsync();
             if (workoutProgram == null)
             {
                 return NotFound();
             }
-
+            try { 
             _context.WorkoutPrograms.Remove(workoutProgram);
             await _context.SaveChangesAsync();
-
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return NoContent();
         }
 
